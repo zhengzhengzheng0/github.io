@@ -33,23 +33,8 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .qrcode-image {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            border: 2px solid #07c160;
-            border-radius: 8px;
-            padding: 5px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .qrcode-image:hover {
-            transform: scale(1.05);
-        }
-        .save-tip {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 8px 0;
+        .wechat-id:hover {
+            background: rgba(7,193,96,0.1);
         }
         .confirm-box {
             display: none;
@@ -84,15 +69,6 @@
         <div class="wechat-id" id="wechatId" onclick="copyWechatId()">zp5890</div>
         <div class="copied-tip" id="copiedTip">✓ 已复制到剪贴板</div>
         
-        <!-- 新增二维码图片 -->
-        <div class="qrcode-container">
-            <img src="https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png" 
-                 class="qrcode-image" 
-                 alt="微信二维码"
-                 onclick="downloadImage()">
-            <p class="save-tip">点击图片保存二维码</p>
-        </div>
-
         <div class="confirm-box" id="confirmBox">
             <p>是否立即跳转微信添加好友？</p>
             <button onclick="jumpToWechat()">立即跳转</button>
@@ -101,13 +77,14 @@
     </div>
 
     <script>
-        // 复制微信号功能（原有）
+        // 复制微信号功能
         function copyWechatId() {
             const text = 'zp5890';
             navigator.clipboard.writeText(text).then(() => {
                 showCopiedTip();
                 showConfirmBox();
             }).catch(() => {
+                // 兼容旧版浏览器
                 const textarea = document.createElement('textarea');
                 textarea.value = text;
                 document.body.appendChild(textarea);
@@ -119,26 +96,7 @@
             });
         }
 
-        // 新增图片下载功能
-        function downloadImage() {
-            const imageUrl = 'https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png';
-            const fileName = 'https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png';
-            
-            // 创建临时链接
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = fileName;
-            
-            // 触发下载
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // 显示确认弹窗
-            showConfirmBox();
-        }
-
-        // 显示复制成功提示（原有）
+        // 显示复制成功提示
         function showCopiedTip() {
             const tip = document.getElementById('copiedTip');
             tip.style.opacity = 1;
@@ -147,43 +105,38 @@
             }, 2000);
         }
 
-        // 显示确认弹窗（原有）
+        // 显示确认弹窗
         function showConfirmBox() {
             document.getElementById('confirmBox').style.display = 'block';
         }
 
-        // 关闭确认弹窗（原有）
+        // 关闭确认弹窗
         function closeConfirm() {
             document.getElementById('confirmBox').style.display = 'none';
         }
 
-        // 跳转微信功能（原有优化）
+        // 跳转微信功能
         function jumpToWechat() {
+            // 微信跳转协议（优先尝试）
             const wechatScheme = 'weixin://dl/add?username=zp5890';
+            
+            // 备用方案：引导到微信搜索页
             const searchUrl = 'https://weixin.qq.com/r/0y8yKk7EyxO0rQpZ93sV';
             
-            // 兼容iOS的跳转方式
+            // 创建隐藏iframe实现协议跳转
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = wechatScheme;
             document.body.appendChild(iframe);
 
+            // 检测是否跳转成功
             setTimeout(() => {
                 document.body.removeChild(iframe);
+                // 如果仍在当前页面则跳转备用方案
                 if (!document.hidden) {
                     window.location.href = searchUrl;
                 }
             }, 500);
-
-            // 添加Android端备用方案
-            if (/Android/i.test(navigator.userAgent)) {
-                window.location.href = wechatScheme;
-                setTimeout(() => {
-                    if (!document.hidden) {
-                        window.location.href = searchUrl;
-                    }
-                }, 500);
-            }
         }
     </script>
 </body>
