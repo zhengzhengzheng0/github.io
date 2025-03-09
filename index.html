@@ -93,6 +93,11 @@
             width: 80%;
             max-width: 320px;
         }
+        .modal p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin: 0.5rem 0;
+        }
         .modal button {
             background: #07c160;
             color: white;
@@ -119,7 +124,7 @@
         <div class="wechat-id" id="wechatId" onclick="copyWechatId()">zp5890</div>
         <p class="copy-tip">点击微信号即可复制</p>
 
-        <!-- 新增按钮：跳转微信 -->
+        <!-- 跳转微信按钮 -->
         <button class="wechat-btn" onclick="jumpToWechat()">跳转微信添加客服</button>
 
         <!-- 文字提示 -->
@@ -136,7 +141,9 @@
 
     <!-- 悬浮弹窗 -->
     <div class="modal" id="modal">
+        <p>✓ 复制成功</p>
         <p>是否立即跳转微信添加？</p>
+        <p>跳转失败请手动打开微信添加！</p>
         <button onclick="jumpToWechat()">立即跳转</button>
         <button class="cancel" onclick="closeModal()">取消</button>
     </div>
