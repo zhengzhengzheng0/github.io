@@ -43,10 +43,26 @@
             font-weight: bold;
             margin-bottom: 1rem;
         }
+        .wechat-btn {
+            background: #07c160;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        .wechat-btn:hover {
+            transform: scale(1.05);
+            background: #059c4d;
+        }
         .qr-text {
-            font-size: 1.2rem; /* 字体加大 */
-            font-family: 'Microsoft YaHei', sans-serif; /* 使用黑体 */
-            color: #000; /* 文字变黑 */
+            font-size: 1.2rem;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #000;
             margin-bottom: 0.5rem;
             font-weight: normal;
         }
@@ -111,6 +127,9 @@
         <img src="https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png" 
              alt="微信二维码" 
              class="qr-image">
+
+        <!-- 调整按钮位置，放到“打开微信扫一扫”下面 -->
+        <button class="wechat-btn" onclick="jumpToWechat()">跳转微信添加客服</button>
 
         <div class="copied-tip" id="copiedTip">✓ 已复制到剪贴板</div>
     </div>
