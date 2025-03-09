@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信添加助手</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .wechat-id {
+            font-size: 1.5rem;
+            color: #07c160;
+            padding: 1rem;
+            border: 2px dashed #07c160;
+            border-radius: 8px;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .qrcode-image {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 2px solid #07c160;
+            border-radius: 8px;
+            padding: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qrcode-image:hover {
+            transform: scale(1.05);
+        }
+        .save-tip {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 8px 0;
+        }
+        .confirm-box {
+            display: none;
+            margin-top: 1.5rem;
+        }
+        button {
+            background: #07c160;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 0.5rem;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .copied-tip {
+            color: #07c160;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>添加客服微信</h2>
+        <div class="wechat-id" id="wechatId" onclick="copyWechatId()">zp5890</div>
+        <div class="copied-tip" id="copiedTip">✓ 已复制到剪贴板</div>
+        
+        <!-- 新增二维码图片 -->
+        <div class="qrcode-container">
+            <img src="https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png" 
+                 class="qrcode-image" 
+                 alt="微信二维码"
+                 onclick="downloadImage()">
+            <p class="save-tip">点击图片保存二维码</p>
+        </div>
+
+        <div class="confirm-box" id="confirmBox">
+            <p>是否立即跳转微信添加好友？</p>
+            <button onclick="jumpToWechat()">立即跳转</button>
+            <button onclick="closeConfirm()">稍后添加</button>
+        </div>
+    </div>
+
+    <script>
+        // 复制微信号功能（原有）
+        function copyWechatId() {
+            const text = 'zp5890';
+            navigator.clipboard.writeText(text).then(() => {
+                showCopiedTip();
+                showConfirmBox();
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopiedTip();
+                showConfirmBox();
+            });
+        }
+
+        // 新增图片下载功能
+        function downloadImage() {
+            const imageUrl = 'https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png';
+            const fileName = 'https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png';
+            
+            // 创建临时链接
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = fileName;
+            
+            // 触发下载
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 显示确认弹窗
+            showConfirmBox();
+        }
+
+        // 显示复制成功提示（原有）
+        function showCopiedTip() {
+            const tip = document.getElementById('copiedTip');
+            tip.style.opacity = 1;
+            setTimeout(() => {
+                tip.style.opacity = 0;
+            }, 2000);
+        }
+
+        // 显示确认弹窗（原有）
+        function showConfirmBox() {
+            document.getElementById('confirmBox').style.display = 'block';
+        }
+
+        // 关闭确认弹窗（原有）
+        function closeConfirm() {
+            document.getElementById('confirmBox').style.display = 'none';
+        }
+
+        // 跳转微信功能（原有优化）
+        function jumpToWechat() {
+            const wechatScheme = 'weixin://dl/add?username=zp5890';
+            const searchUrl = 'https://weixin.qq.com/r/0y8yKk7EyxO0rQpZ93sV';
+            
+            // 兼容iOS的跳转方式
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = wechatScheme;
+            document.body.appendChild(iframe);
+
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+                if (!document.hidden) {
+                    window.location.href = searchUrl;
+                }
+            }, 500);
+
+            // 添加Android端备用方案
+            if (/Android/i.test(navigator.userAgent)) {
+                window.location.href = wechatScheme;
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        window.location.href = searchUrl;
+                    }
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
