@@ -39,14 +39,16 @@
         }
         .copy-tip {
             color: #07c160;
-            font-size: 1.1rem; /* 调大字号 */
-            font-weight: bold; /* 加粗 */
+            font-size: 1.1rem;
+            font-weight: bold;
             margin-bottom: 1rem;
         }
         .qr-text {
-            font-size: 0.9rem;
-            color: #07c160;
+            font-size: 1.2rem; /* 字体加大 */
+            font-family: 'Microsoft YaHei', sans-serif; /* 使用黑体 */
+            color: #000; /* 文字变黑 */
             margin-bottom: 0.5rem;
+            font-weight: normal;
         }
         .qr-image {
             width: 100%;
@@ -61,7 +63,6 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        /* 居中弹窗样式 */
         .modal {
             display: none;
             position: fixed;
@@ -104,6 +105,7 @@
 
         <!-- 文字提示 -->
         <p class="qr-text">截图保存二维码</p>
+        <p class="qr-text">打开微信扫一扫，添加客服微信</p>
 
         <!-- 微信二维码图片 -->
         <img src="https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/wechat-qr.png" 
@@ -121,14 +123,12 @@
     </div>
 
     <script>
-        // 复制微信号功能
         function copyWechatId() {
             const text = 'zp5890';
             navigator.clipboard.writeText(text).then(() => {
                 showCopiedTip();
-                showModal(); // 显示弹窗
+                showModal();
             }).catch(() => {
-                // 兼容旧版浏览器
                 const textarea = document.createElement('textarea');
                 textarea.value = text;
                 document.body.appendChild(textarea);
@@ -136,11 +136,10 @@
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
                 showCopiedTip();
-                showModal(); // 显示弹窗
+                showModal();
             });
         }
 
-        // 显示复制成功提示
         function showCopiedTip() {
             const tip = document.getElementById('copiedTip');
             tip.style.opacity = 1;
@@ -149,17 +148,14 @@
             }, 2000);
         }
 
-        // 显示弹窗
         function showModal() {
             document.getElementById('modal').style.display = 'block';
         }
 
-        // 关闭弹窗
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
         }
 
-        // 直接跳转到微信APP
         function jumpToWechat() {
             window.location.href = 'weixin://dl/add?username=zp5890';
         }
