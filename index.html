@@ -5,32 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>微信添加助手</title>
     <style>
-        /* 设置背景图片固定不动 */
+        /* 设置背景图片随内容滚动，超出时无缝衔接 */
         body {
-            background: url('https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/image_0%20.png') no-repeat center center fixed;
+            background: url('https://wechat-qr-123-1301830029.cos.ap-guangzhou.myqcloud.com/image_0%20.png') repeat-y center top;
             background-size: cover;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            position: relative;
-            overflow-y: auto; /* 允许上下滚动 */
+            padding: 2rem 1rem;
         }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             max-width: 400px;
-            width: 90%;
-            margin-top: 5vh;
-            margin-bottom: 5vh;
+            width: 100%;
         }
         .wechat-id {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #07c160;
             padding: 1rem;
             border: 2px dashed #07c160;
@@ -38,14 +34,29 @@
             margin: 1rem 0 0.5rem;
             cursor: pointer;
             transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.5);
         }
         .wechat-id:hover {
-            background: rgba(7,193,96,0.1);
+            background: rgba(7, 193, 96, 0.2);
         }
         .copy-tip {
             color: #07c160;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .qr-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .qr-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
             margin-bottom: 1rem;
         }
         .wechat-btn {
@@ -64,22 +75,9 @@
             transform: scale(1.05);
             background: #059c4d;
         }
-        .qr-text {
-            font-size: 1.2rem;
-            font-family: 'Microsoft YaHei', sans-serif;
-            color: #000;
-            margin-bottom: 0.5rem;
-            font-weight: normal;
-        }
-        .qr-image {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
         .copied-tip {
             color: #07c160;
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin: 0.5rem 0;
             opacity: 0;
             transition: opacity 0.3s;
@@ -90,17 +88,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
             padding: 1.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             text-align: center;
             width: 80%;
             max-width: 320px;
         }
         .modal p {
             font-size: 1.1rem;
-            line-height: 1.8;
             margin: 0.5rem 0;
         }
         .modal button {
@@ -124,7 +121,7 @@
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="container">
         <h2>添加客服微信</h2>
         <div class="wechat-id" id="wechatId" onclick="copyWechatId()">zp5890</div>
         <p class="copy-tip">点击微信号即可复制</p>
@@ -138,7 +135,7 @@
              alt="微信二维码" 
              class="qr-image">
 
-        <!-- 跳转微信按钮 (调整到二维码图片下面) -->
+        <!-- 跳转微信按钮 -->
         <button class="wechat-btn" onclick="jumpToWechat()">跳转微信添加客服</button>
 
         <div class="copied-tip" id="copiedTip">✓ 已复制到剪贴板</div>
