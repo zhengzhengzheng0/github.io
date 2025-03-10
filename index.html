@@ -138,6 +138,43 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
+        /* 弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            width: 80%;
+            max-width: 320px;
+        }
+        .modal p {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+        .modal button {
+            background: #07c160;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 1rem;
+        }
+        .modal button:hover {
+            transform: scale(1.05);
+        }
+        .modal .cancel {
+            background: #ccc;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -177,20 +214,36 @@
         <div class="copied-tip" id="copiedTip">✓ 已复制到剪贴板</div>
     </div>
 
+    <!-- 弹窗 -->
+    <div class="modal" id="modal">
+        <p>✓ 复制成功</p>
+        <p>是否立即跳转微信添加？</p>
+        <p>跳转失败请手动打开微信添加！</p>
+        <button onclick="jumpToWechat()">立即跳转</button>
+        <button class="cancel" onclick="closeModal()">取消</button>
+    </div>
+
     <script>
         function copyWechatId() {
             const text = 'zp5890';
             navigator.clipboard.writeText(text).then(() => {
                 showCopiedTip();
+                showModal();
             });
         }
 
         function showCopiedTip() {
             const tip = document.getElementById('copiedTip');
             tip.style.opacity = 1;
-            setTimeout(() => {
-                tip.style.opacity = 0;
-            }, 2000);
+            setTimeout(() => { tip.style.opacity = 0; }, 2000);
+        }
+
+        function showModal() {
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
         }
 
         function jumpToWechat() {
