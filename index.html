@@ -1,11 +1,15 @@
+<button onclick="jumpToWeChatApp()" style="padding: 12px 20px; background: #07c160; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+    添加微信
+</button>
+
 <script>
-    function jumpToWechat() {
-        alert("如果没有自动跳转，请手动打开微信");
-        window.location.href = 'weixin://';
-        
-        // 等待 1.5 秒后，跳转到小程序
+    function jumpToWeChatApp() {
+        // 先跳转到微信
+        window.location.href = "weixin://";
+
+        // 延迟 2 秒后跳转到小程序
         setTimeout(() => {
-            window.location.href = '#小程序://微商相册/rPBxyjXmnfO5p8A';
-        }, 1500);
+            window.location.href = "#小程序://微商相册/rPBxyjXmnfO5p8A";
+        }, 2000);
     }
 </script>
