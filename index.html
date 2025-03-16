@@ -1,13 +1,15 @@
-<button onclick="jumpToWeChatApp()" style="padding: 12px 20px; background: #07c160; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+<!-- 添加微信按钮 -->
+<button onclick="jumpToWeChat()" 
+        style="padding: 12px 20px; background: #07c160; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
     添加微信
 </button>
 
 <script>
-    function jumpToWeChatApp() {
-        // 先跳转到微信
+    function jumpToWeChat() {
+        // 1. 跳转到微信 APP
         window.location.href = "weixin://";
 
-        // 延迟 2 秒后跳转到小程序
+        // 2. 延迟 2 秒，跳转小程序
         setTimeout(() => {
             window.location.href = "#小程序://微商相册/rPBxyjXmnfO5p8A";
         }, 2000);
