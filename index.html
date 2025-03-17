@@ -1,58 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加微信</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>微商相册小程序跳转</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f5f5f5;
+        .container {
+            padding: 20px;
+            text-align: center;
         }
-
-        button {
-            width: 80%;
-            max-width: 400px;
-            height: 50px;
-            background: #07c160;
+        .jump-btn {
+            padding: 12px 24px;
+            background-color: #07c160;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        }
+        .tips {
+            color: #888;
+            font-size: 14px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-
-    <!-- 按钮 -->
-    <button onclick="jumpToWeChat()">点击添加微信</button>
+    <div class="container">
+        <button class="jump-btn" onclick="handleJump()">立即打开小程序</button>
+        <div class="tips">如果无法跳转，请确认已安装最新版微信</div>
+    </div>
 
     <script>
-        function jumpToWeChat() {
-            // 1️⃣ 尝试跳转到微信
-            window.location.href = "weixin://";
+        // 核心跳转逻辑
+        function handleJump() {
+            const scheme = "weixin://dl/business/?t=加密参数"; // 官方生成的有效Scheme
+            const fallbackUrl = "https://wxaurl.cn/path/to/your/webpage"; // 备选H5地址
             
-            // 2️⃣ 设置 1 秒后检查微信是否启动成功
-            setTimeout(() => {
-                // 检查是否在微信环境
-                if (navigator.userAgent.toLowerCase().includes('micromessenger')) {
-                    // 进入微信后，跳转小程序
-                    window.location.href = "#小程序://微商相册/EuRd55d5ageBJ3t";
-                } else {
-                    // 提示用户未安装微信
-                    alert('未能启动微信，请确保已安装微信并重试。');
-                }
-            }, 1000); // 1 秒后检测微信启动情况
+            // 兼容性跳转方案
+            try {
+                // 优先尝试直接跳转
+                location.href = scheme;
+                
+                // 防止跳转阻塞（iOS/Android双保险）
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        location.href = fallbackUrl;
+                    }
+                }, 1500);
+                
+                // 隐藏式iframe触发（针对部分浏览器拦截）
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = scheme;
+                document.body.appendChild(iframe);
+                
+            } catch (e) {
+                console.error('跳转失败:', e);
+                location.href = fallbackUrl;
+            }
+        }
+
+        // 环境检测（建议在服务端完成）
+        function checkWeixinBrowser() {
+            const ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('micromessenger') !== -1;
+        }
+
+        // 初始化检测
+        if (!checkWeixinBrowser()) {
+            document.querySelector('.tips').innerHTML = 
+                '请在微信客户端内打开本页面';
+            document.querySelector('.jump-btn').disabled = true;
         }
     </script>
-
 </body>
 </html>
